@@ -5,110 +5,96 @@ public class SharedCarParkState{
 	
 	private SharedCarParkState mySharedObj;
 	private String myThreadName;
-	private double mySharedVariable;
+	private double floor1AvailableCarSpace;
+	private double floor2AvailableCarSpace;
 	private boolean accessing=false; // true a thread has a lock, false otherwise
 	private int threadsWaiting=0; // number of waiting writers
-
-// Constructor	
 	
-	SharedCarParkState(double SharedVariable) {
-		mySharedVariable = SharedVariable;
+	
+   // Constructor	
+	
+	public SharedCarParkState(double floor1Variable, double floor2Variable) {
+		floor1AvailableCarSpace = floor1Variable;
+		floor2AvailableCarSpace = floor2Variable;
 	}
 
-//Attempt to aquire a lock
+   //Attempt to aquire a lock
 	
-	  public synchronized void acquireLock() throws InterruptedException{
-	        Thread me = Thread.currentThread(); // get a ref to the current thread
-	        System.out.println(me.getName()+" is attempting to acquire a lock!");	
-	        ++threadsWaiting;
-		    while (accessing) {  // while someone else is accessing or threadsWaiting > 0
-		      System.out.println(me.getName()+" waiting to get a lock as someone else is accessing...");
-		      //wait for the lock to be released - see releaseLock() below
-		      wait();
-		    }
-		    // nobody has got a lock so get one
-		    --threadsWaiting;
-		    accessing = true;
-		    System.out.println(me.getName()+" got a lock!"); 
-		  }
+    public synchronized void acquireLock() throws InterruptedException {
+        Thread me = Thread.currentThread(); // get a ref to the current thread
+        //System.out.println(me.getName()+" is attempting to acquire a lock!");	
+        ++threadsWaiting;
+	    while (accessing) {  // while someone else is accessing or threadsWaiting > 0
+	      System.out.println(me.getName()+" waiting to get a lock as someone else is accessing...");
+	      //wait for the lock to be released - see releaseLock() below
+	      wait();
+	    }
+	    // nobody has got a lock so get one
+	    --threadsWaiting;
+	    accessing = true;
+	    //System.out.println(me.getName()+" got a lock!"); 
+	 }
 
-		  // Releases a lock to when a thread is finished
-		  
-		  public synchronized void releaseLock() {
-			  //release the lock and tell everyone
-		      accessing = false;
-		      notifyAll();
-		      Thread me = Thread.currentThread(); // get a ref to the current thread
-		      System.out.println(me.getName()+" released a lock!");
-		  }
+	 // Releases a lock to when a thread is finished
+	  
+	 public synchronized void releaseLock() {
+	     //release the lock and tell everyone
+	     accessing = false;
+	     notifyAll();
+	     Thread me = Thread.currentThread(); // get a ref to the current thread
+	     //System.out.println(me.getName()+" released a lock!");
+	 }
 	
 	
     /* The processInput method */
 
-	public synchronized String processInput(String myThreadName, String theInput) {
-    		System.out.println(myThreadName + " received "+ theInput);
+	public synchronized String[] processInput(String myThreadName, String theInput) {
     		String theOutput = null;
+    		
     		// Check what the client said
-    		if (theInput.equalsIgnoreCase("Do my CarPark!")) {
-    			//Correct request
-    			if (myThreadName.equals("CarParkServerThread1")) {
-    				/*  Add 20 to the variable
-    					multiply it by 5
-    					divide by 3.
-    				 */
-    				mySharedVariable = mySharedVariable + 20;
-       				mySharedVariable = mySharedVariable * 5;
-       				mySharedVariable = mySharedVariable / 3;
-   				System.out.println(myThreadName + " made the SharedVariable " + mySharedVariable);
-    				theOutput = "Do CarPark completed.  Shared Variable now = " + mySharedVariable;
+    		
+    		if (theInput.equalsIgnoreCase("InFloor1")) { // car entering floor 1
+    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
+    				// subtract 1 car from floor 1
+    				floor1AvailableCarSpace = floor1AvailableCarSpace - 1;
+    				theOutput = "\"Incoming car request to floor 1 completed\".  Car spaces on floor 1 available now = " + floor1AvailableCarSpace;
     			}
-    			else if (myThreadName.equals("CarParkServerThread2")) {
-    				/*	Subtract 5 from the variable
-    					Multiply it by 10 
-    					Divide by 2.5
-    					*/
-       				mySharedVariable = mySharedVariable - 5;
-       				mySharedVariable = mySharedVariable * 10;
-       				mySharedVariable = mySharedVariable / 2.5;
-    					
-    				System.out.println(myThreadName + " made the SharedVariable " + mySharedVariable);
-    				theOutput = "Do CarPark completed.  Shared Variable now = " + mySharedVariable;
-
-    			}
-       			else if (myThreadName.equals("CarParkServerThread3")) {
-       				/*	Subtract 50
-						Divide by 2
-						Multiply by 33
-       				 */
-       				mySharedVariable = mySharedVariable - 50;
-       				mySharedVariable = mySharedVariable / 2;
-       				mySharedVariable = mySharedVariable * 33;
- 
-       				System.out.println(myThreadName + " made the SharedVariable " + mySharedVariable);
-    				theOutput = "Do CarPark completed.  Shared Variable now = " + mySharedVariable;
-
-       			}
-       			else if (myThreadName.equals("CarParkServerThread4")) {
-    				/*	Multiply by 20
-						Divide by 10
-						Subtract 1
-    				 */
-       				mySharedVariable = mySharedVariable * 20;
-       				mySharedVariable = mySharedVariable / 10;
-       				mySharedVariable = mySharedVariable - 1;
-    				System.out.println(myThreadName + " made the SharedVariable " + mySharedVariable);
-    				theOutput = "Do CarPark completed.  Shared Variable now = " + mySharedVariable;
-       			}
-       			else {System.out.println("Error - thread call not recognised.");}
+   			else {System.out.println("Error - thread call not recognised.");}
     		}
-    		else { //incorrect request
-    			theOutput = myThreadName + " received incorrect request - only understand \"Do my CarPark!\"";
-		
+    		
+    		else if (theInput.equalsIgnoreCase("OutFloor1")) { //car leaving the car park
+    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
+    				// add 1 car space
+    				floor1AvailableCarSpace = floor1AvailableCarSpace + 1;
+    				theOutput = "\"Outgoing car request completed\".  Car spaces on floor 1 available now = " + floor1AvailableCarSpace;
+    			}
+   			else {System.out.println("Error - thread call not recognised.");}
+    		}
+    		
+    		else if (theInput.equalsIgnoreCase("InFloor2")) { // car entering floor 2
+    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
+    				// subtract 1 car from floor 2
+    				floor2AvailableCarSpace = floor2AvailableCarSpace - 1;
+    				theOutput = "\"Incoming car request to floor 2 completed\".  Car spaces on floor 2 available now = " + floor2AvailableCarSpace;
+    			}
+   			else {System.out.println("Error - thread call not recognised.");}
     		}
  
-     		//Return the output message to the CarParkServer
-    		System.out.println(theOutput);
-    		return theOutput;
-    	}	
+    		else if (theInput.equalsIgnoreCase("OutFloor2")) { //car leaving the car park
+    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
+    				// add 1 car space
+    				floor2AvailableCarSpace = floor2AvailableCarSpace + 1;
+    				theOutput = "\"Outgoing car request completed\".  Car spaces on floor 2 available now = " + floor2AvailableCarSpace;
+    			}
+   			else {System.out.println("Error - thread call not recognised.");}
+    		}
+    		
+     	//Return the output message to the CarParkServer
+    		return new String[] {theOutput, String.valueOf(floor1AvailableCarSpace), String.valueOf(floor2AvailableCarSpace)};
+    	}
 }
 

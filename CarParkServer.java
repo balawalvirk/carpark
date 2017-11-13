@@ -1,23 +1,23 @@
 import java.net.*;
 import java.io.*;
 
-
-
-
-
 public class CarParkServer {
   public static void main(String[] args) throws IOException {
 
 	ServerSocket CarParkServerSocket = null;
     boolean listening = true;
     String CarParkServerName = "CarParkServer";
-    int CarParkServerNumber = 4545;
+    int CarParkServerNumber = 4000;
     
-    double SharedVariable = 100;
+    double floor1Variable = 20;
+    double floor2Variable = 20;
 
-    //Create the shared object in the global scope...
+    //break down to two variables - 20 floor 1, 20 floor 2
+    //pass two variables in the constructor - change the constructor for sharedCarParkState
+    //handle each variable differently
     
-    SharedCarParkState ourCarParkStateObject = new SharedCarParkState(SharedVariable);
+    //Create the shared object in the global scope...
+    SharedCarParkState ourCarParkStateObject = new SharedCarParkState(floor1Variable, floor2Variable);
         
     // Make the server socket
 
