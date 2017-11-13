@@ -50,11 +50,12 @@ public class SharedCarParkState{
 
 	public synchronized String[] processInput(String myThreadName, String theInput) {
     		String theOutput = null;
-    		
     		// Check what the client said
     		
     		if (theInput.equalsIgnoreCase("InFloor1")) { // car entering floor 1
-    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    			if(floor1AvailableCarSpace == 0)
+    				theOutput = "Invalid scenario - Car park already full";
+    			else if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
     					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
     				// subtract 1 car from floor 1
     				floor1AvailableCarSpace = floor1AvailableCarSpace - 1;
@@ -63,8 +64,10 @@ public class SharedCarParkState{
    			else {System.out.println("Error - thread call not recognised.");}
     		}
     		
-    		else if (theInput.equalsIgnoreCase("OutFloor1")) { //car leaving the car park
-    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    		else if (theInput.equalsIgnoreCase("OutFloor1")) { //car leaving floor 1
+    			if(floor1AvailableCarSpace == 20)
+    				theOutput = "Invalid scenario - Car park already empty";
+    			else if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
     					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
     				// add 1 car space
     				floor1AvailableCarSpace = floor1AvailableCarSpace + 1;
@@ -74,7 +77,9 @@ public class SharedCarParkState{
     		}
     		
     		else if (theInput.equalsIgnoreCase("InFloor2")) { // car entering floor 2
-    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    			if(floor2AvailableCarSpace == 0)
+    				theOutput = "Invalid scenario - Car park already empty";
+    			else if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
     					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
     				// subtract 1 car from floor 2
     				floor2AvailableCarSpace = floor2AvailableCarSpace - 1;
@@ -83,8 +88,10 @@ public class SharedCarParkState{
    			else {System.out.println("Error - thread call not recognised.");}
     		}
  
-    		else if (theInput.equalsIgnoreCase("OutFloor2")) { //car leaving the car park
-    			if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
+    		else if (theInput.equalsIgnoreCase("OutFloor2")) { //car leaving floor 2
+    			if(floor2AvailableCarSpace == 20)
+    				theOutput = "Invalid scenario - Car park already empty";
+    			else if (myThreadName.equals("CarParkServerThread1") || myThreadName.equals("CarParkServerThread2")
     					|| myThreadName.equals("CarParkServerThread3") || myThreadName.equals("CarParkServerThread4")) {
     				// add 1 car space
     				floor2AvailableCarSpace = floor2AvailableCarSpace + 1;
