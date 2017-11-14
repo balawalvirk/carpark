@@ -8,10 +8,17 @@ public class UIClientBridge implements Runnable {
     public static volatile String noOfCarSpacesAvailableOnFloor2 = "";
     
     
-	public UIClientBridge(String keyValue) {
+	public UIClientBridge(String keyValue, String client) {
 		carSpaceAction = keyValue;
 	    try {
-			Entrance1.main(null);
+	    		if(client.equalsIgnoreCase("entrance1"))
+	    			Entrance1.main(null);
+	    		else if(client.equalsIgnoreCase("entrance2"))
+	    			Entrance2.main(null);
+	    		else if(client.equalsIgnoreCase("exit1"))
+	    			Exit1.main(null);
+	    		else if(client.equalsIgnoreCase("exit2"))
+	    			Exit2.main(null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

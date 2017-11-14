@@ -64,21 +64,21 @@ public class UI extends JPanel implements KeyListener {
     	//floor 1
     		if(e.getKeyChar() == 'a' && spacesAvailableOnFloor1_double > 0) {
     			isParkingSpacesVisible = true;
-    			UIClientBridge uiClientBridge = new UIClientBridge("InFloor1");
+    			UIClientBridge uiClientBridge = new UIClientBridge("InFloor1", "entrance1");
     		}
     		else if(e.getKeyChar() == 's' && spacesAvailableOnFloor1_double < 20) {
     			isParkingSpacesVisible = true;
-    			UIClientBridge uiClientBridge = new UIClientBridge("OutFloor1");
+    			UIClientBridge uiClientBridge = new UIClientBridge("OutFloor1", "entrance2");
     		}
     		
     	//floor2
     		else if(e.getKeyChar() == 'q' && spacesAvailableOnFloor2_double > 0) {
     			isParkingSpacesVisible = true;
-    			UIClientBridge uiClientBridge = new UIClientBridge("InFloor2");
+    			UIClientBridge uiClientBridge = new UIClientBridge("InFloor2", "exit1");
     		}
     		else if(e.getKeyChar() == 'w' && spacesAvailableOnFloor2_double < 20) {
     			isParkingSpacesVisible = true;
-    			UIClientBridge uiClientBridge = new UIClientBridge("OutFloor2");
+    			UIClientBridge uiClientBridge = new UIClientBridge("OutFloor2", "exit2");
     		}
         repaint();
     }
@@ -94,8 +94,8 @@ public class UI extends JPanel implements KeyListener {
 			spacesAvailableOnFloor2_double = Double.parseDouble(spacesAvailableOnFloor2);
     		}
     		else {
-    			spacesAvailableOnFloor1 = "Please press \"U\" or \"I\" or \"O\"";
-    			spacesAvailableOnFloor2 = "Please press \"U\" or \"I\" or \"O\"";
+    			spacesAvailableOnFloor1 = "Please press \"A\" for IN or \"S\" for OUT";
+    			spacesAvailableOnFloor2 = "Please press \"Q\" for IN or \"W\" for OUT";
     			//random number to make if statements work in the keyTyped method for the first time
     			spacesAvailableOnFloor1_double = 10;
     			spacesAvailableOnFloor2_double = 10;
@@ -104,12 +104,12 @@ public class UI extends JPanel implements KeyListener {
     
     private void invalidCases() {
     		if(spacesAvailableOnFloor1_double == 20)
-    			spacesAvailableOnFloor1 = "Floor 1 empty!";
+    			spacesAvailableOnFloor1 = "20 (Floor 1 empty!)";
     		if(spacesAvailableOnFloor1_double == 0)
-    			spacesAvailableOnFloor1 = "Floor 1 full!";
+    			spacesAvailableOnFloor1 = "0 (Floor 1 full!)";
     		if(spacesAvailableOnFloor2_double == 20)
-    			spacesAvailableOnFloor2 = "Floor 2 empty!";
+    			spacesAvailableOnFloor2 = "20 (Floor 2 empty!)";
     		if(spacesAvailableOnFloor2_double == 0)
-    			spacesAvailableOnFloor2 = "Floor 2 full!";
+    			spacesAvailableOnFloor2 = "0 (Floor 2 full!)";
     }
 }

@@ -10,7 +10,7 @@ public class Entrance1 {
         Socket CarParkClientSocket = null;
         PrintWriter out = null;
         BufferedReader in = null;
-        int CarParkSocketNumber = 4000;
+        int CarParkSocketNumber = 4545;
         String CarParkServerName = "localhost";
         String Entrance1 = "Entrance1";
         
@@ -53,7 +53,7 @@ public class Entrance1 {
         uiClientBridge.setAvailableCarParkSpacesFloor2(s[2]);
         
        // Tidy up - not really needed due to true condition in while loop
-      //  out.close();
+       //  out.close();
        // in.close();
        // stdIn.close();
        // CarParkClientSocket.close();

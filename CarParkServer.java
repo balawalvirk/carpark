@@ -7,7 +7,7 @@ public class CarParkServer {
 	ServerSocket CarParkServerSocket = null;
     boolean listening = true;
     String CarParkServerName = "CarParkServer";
-    int CarParkServerNumber = 4000;
+    int CarParkServerNumber = 4545;
     
     double floor1Variable = 20;
     double floor2Variable = 20;
